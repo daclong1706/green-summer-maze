@@ -80,7 +80,7 @@ export function generateMaze(size: number): CellType[][] {
   const obstacles = new Set<string>();
   shuffle(reachable);
   let count = 0;
-  for (const [r, c, _] of reachable) {
+  for (const [r, c] of reachable) {
     if ((r === 0 && c === 0) || obstacles.has(`${r},${c}`)) continue;
     maze[r][c] = "O";
     obstacles.add(`${r},${c}`);
