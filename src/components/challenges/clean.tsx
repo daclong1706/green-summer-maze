@@ -27,7 +27,7 @@ export function ChallengeClean({
   const searchParams = useSearchParams();
   const size = parseInt(searchParams.get("size") || "8");
 
-  const [items, setItems] = useState<CleanItem[]>([]);
+  const [items, setItems] = useState<(CleanItem & { bgColor?: string })[]>([]);
   const [correct, setCorrect] = useState(0);
   const [failCount, setFailCount] = useState(0);
   const [feedbackOpen, setFeedbackOpen] = useState(false);
@@ -69,7 +69,7 @@ export function ChallengeClean({
     } else if (failCount >= 3) {
       onCancel();
     }
-  }, [correct, failCount]);
+  }, [correct, failCount, onSuccess, onCancel]);
 
   return (
     <>

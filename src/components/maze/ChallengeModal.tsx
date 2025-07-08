@@ -9,7 +9,6 @@ import {
 import { ChallengeReorder } from "@/components/challenges/reorder";
 import { ChallengeMatch } from "@/components/challenges/match";
 import { ChallengeTrafficLight } from "../challenges/traffic-light";
-import { tr } from "framer-motion/client";
 import { ChallengeClean } from "../challenges/clean";
 import { ChallengeQuiz } from "../challenges/quiz";
 

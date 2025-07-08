@@ -87,7 +87,7 @@ export function ChallengeReorder({
 
     setSlots(newSlots);
     setShuffled(updatedShuffled);
-  }, []);
+  }, [size]);
 
   const handleDrop = (index: number) => {
     if (!draggingChar) return;

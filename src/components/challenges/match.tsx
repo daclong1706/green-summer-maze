@@ -1,11 +1,10 @@
 // src/components/challenges/match.tsx
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { EmojiFeedback } from "../EmojiFeedback";
 import { getPairsBySize } from "@/data/matching-pairs";
+import { useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import { EmojiFeedback } from "../EmojiFeedback";
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -46,7 +45,7 @@ export function ChallengeMatch({
     const selectedPairs = shuffle(allPairs).slice(0, 5);
     setPairs(selectedPairs);
     setLeftItems(selectedPairs.map(([left]) => left));
-    setRightItems(shuffle(selectedPairs.map(([_, right]) => right)));
+    setRightItems(shuffle(selectedPairs.map(([, right]) => right)));
   }, [size]);
 
   const handleSelect = (side: "left" | "right", index: number) => {
@@ -71,7 +70,7 @@ export function ChallengeMatch({
       }
       setAttempts((a) => a + 1);
     }
-  }, [selected]);
+  }, [selected, pairs, rightItems]);
 
   useEffect(() => {
     const correctCount = Object.keys(matched).length;
@@ -80,7 +79,7 @@ export function ChallengeMatch({
     } else if (failCount >= 3) {
       onCancel();
     }
-  }, [matched, attempts, failCount]);
+  }, [matched, attempts, failCount, onSuccess, onCancel]);
 
   return (
     <>

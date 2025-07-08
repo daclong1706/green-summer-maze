@@ -22,12 +22,6 @@ const levelColors: Record<TrafficLevel, string> = {
   green: "bg-green-500",
 };
 
-const levelContents: Record<TrafficLevel, string> = {
-  red: "Nguy hiểm",
-  yellow: "Cẩn thận",
-  green: "An toàn",
-};
-
 export function ChallengeTrafficLight({
   onSuccess,
   onCancel,
