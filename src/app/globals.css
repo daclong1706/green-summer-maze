@@ -153,3 +153,9 @@
 .animate-pop {
   animation: pop 0.5s ease-out;
 }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  opacity: 0.1; /* hoặc 0 để ẩn hoàn toàn */
+  background-color: #ecfdf5; /* màu nền giống background */
+}

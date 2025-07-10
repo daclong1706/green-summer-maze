@@ -11,6 +11,9 @@ import { ChallengeMatch } from "@/components/challenges/match";
 import { ChallengeTrafficLight } from "../challenges/traffic-light";
 import { ChallengeClean } from "../challenges/clean";
 import { ChallengeQuiz } from "../challenges/quiz";
+import { ChallengeTruthCheck } from "../challenges/truth-check";
+import { ChallengeSecretSituation } from "../challenges/secret-situation";
+import { ChallengeSecretSearch } from "../challenges/secret-search";
 
 interface ChallengeModalProps {
   show: boolean;
@@ -25,6 +28,9 @@ const titles: Record<string, string> = {
   traffic: "Đèn giao thông an toàn",
   clean: "Dọn dẹp rác thải",
   quiz: "Kiến thức tỉnh táo",
+  truth: "Sự thật hay tin giả",
+  situation: "Tình huống bí mật",
+  search: "Tìm kiếm bí mật",
 };
 
 export const ChallengeModal = ({
@@ -43,7 +49,7 @@ export const ChallengeModal = ({
           backgroundPosition: "center",
         }}
       >
-        <DialogHeader>
+        <DialogHeader className="p-0">
           <DialogTitle className="text-3xl font-bold text-center text-green-700 uppercase">
             {type && titles[type]}
           </DialogTitle>
@@ -63,6 +69,15 @@ export const ChallengeModal = ({
         )}
         {type === "quiz" && (
           <ChallengeQuiz onSuccess={onSuccess} onCancel={onCancel} />
+        )}
+        {type === "truth" && (
+          <ChallengeTruthCheck onSuccess={onSuccess} onCancel={onCancel} />
+        )}
+        {type === "situation" && (
+          <ChallengeSecretSituation onSuccess={onSuccess} onCancel={onCancel} />
+        )}
+        {type === "search" && (
+          <ChallengeSecretSearch onSuccess={onSuccess} onCancel={onCancel} />
         )}
       </DialogContent>
     </Dialog>

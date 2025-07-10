@@ -3,11 +3,12 @@ import { useEffect, useRef, useState } from "react";
 import { generateMaze } from "@/utils/generateMaze";
 import { Howl } from "howler";
 import confetti from "canvas-confetti";
+import { ChallengeType } from "@/data/challenge-types";
+// "reorder", "match", "traffic", "clean", "quiz", "truth", "situation"
+// const CHALLENGES = ["search", "situation", "truth"] as const;
+// type ChallengeType = (typeof CHALLENGES)[number];
 
-const CHALLENGES = ["reorder", "match", "traffic", "clean", "quiz"] as const;
-type ChallengeType = (typeof CHALLENGES)[number];
-
-export function useMazeGame(size: number) {
+export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
   const [maze, setMaze] = useState<string[][]>([]);
   const [playerPos, setPlayerPos] = useState({ row: 0, col: 0 });
   const [seconds, setSeconds] = useState(0);
@@ -32,7 +33,7 @@ export function useMazeGame(size: number) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
-    const mazeData = generateMaze(size);
+    const mazeData = generateMaze(size, challengeTypes.length);
     setMaze(mazeData);
     setPlayerPos({ row: 0, col: 0 });
     setSeconds(0);
@@ -40,11 +41,11 @@ export function useMazeGame(size: number) {
     setChallengeCount(0);
     setCompletedObstacles(new Set());
     setFailedObstacles(new Set());
-    setChallengeQueue(shuffleChallenges());
+    setChallengeQueue(shuffleChallenges(challengeTypes));
     setShowChallenge(false);
     setCurrentChallengeType(null);
     setCurrentObstacleKey(null);
-  }, [size]);
+  }, [size, challengeTypes]);
 
   useEffect(() => {
     timerRef.current = setInterval(() => setSeconds((s) => s + 1), 1000);
@@ -52,12 +53,12 @@ export function useMazeGame(size: number) {
   }, []);
 
   useEffect(() => {
-    stepSound.current = new Howl({ src: ["/step.mp3"] });
+    stepSound.current = new Howl({ src: ["/step.wav"] });
     winSound.current = new Howl({ src: ["/win.mp3"] });
   }, []);
 
-  const shuffleChallenges = (): ChallengeType[] => {
-    const arr = [...CHALLENGES];
+  const shuffleChallenges = (types: ChallengeType[]): ChallengeType[] => {
+    const arr = [...types];
     for (let i = arr.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [arr[i], arr[j]] = [arr[j], arr[i]];
@@ -105,12 +106,19 @@ export function useMazeGame(size: number) {
     if (currentObstacleKey) {
       setCompletedObstacles((prev) => new Set(prev).add(currentObstacleKey));
     }
-    setChallengeCount((count) => count + 1);
+
+    const newCount = challengeCount + 1;
+    setChallengeCount(newCount);
     setShowChallenge(false);
     setCurrentChallengeType(null);
     setCurrentObstacleKey(null);
 
-    if (challengeCount + 1 >= 3) {
+    const totalChallenges = challengeTypes.length;
+
+    const requiredToWin =
+      totalChallenges <= 3 ? 2 : Math.ceil(totalChallenges / 2);
+
+    if (completedObstacles.size + 1 >= requiredToWin) {
       setFinished(true);
       winSound.current?.play();
       confetti({ particleCount: 150, spread: 80 });

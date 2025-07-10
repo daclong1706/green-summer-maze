@@ -4,7 +4,7 @@ export function getQuestionsBySize(size: number): {
   options: string[];
   correctIndex: number;
 }[] {
-  if (size <= 8) {
+  if (size < 9) {
     return [
       {
         question: "Mật khẩu mạnh nên bao gồm?",

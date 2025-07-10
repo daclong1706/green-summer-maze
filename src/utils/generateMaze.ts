@@ -1,7 +1,12 @@
 // src/utils/generateMaze.ts
 export type CellType = " " | "X" | "O";
 
-export function generateMaze(size: number): CellType[][] {
+export function generateMaze(
+  size: number,
+  numObstacles: number = 6
+): CellType[][] {
+  if (size % 2 === 0) size += 1;
+
   const maze: CellType[][] = Array.from({ length: size }, () =>
     Array.from({ length: size }, () => "X")
   );
@@ -76,7 +81,6 @@ export function generateMaze(size: number): CellType[][] {
     }
   }
 
-  // Chọn 5 vị trí để đặt chướng ngại vật "O"
   const obstacles = new Set<string>();
   shuffle(reachable);
   let count = 0;
@@ -85,7 +89,7 @@ export function generateMaze(size: number): CellType[][] {
     maze[r][c] = "O";
     obstacles.add(`${r},${c}`);
     count++;
-    if (count === 4) break;
+    if (count === numObstacles - 1) break; // -1 vì sẽ thêm 1 ở farthest bên dưới
   }
 
   // Đặt chướng ngại vật cuối cùng tại điểm xa nhất

@@ -8,17 +8,31 @@ import { useMazeGame } from "@/components/maze/useMazeGame";
 import { VictoryScreen } from "@/components/VictoryScreen";
 import { DefeatScreen } from "@/components/DefeatScreen";
 import Image from "next/image";
+import { ChallengeType } from "@/data/challenge-types";
+import { useEffect, useState } from "react";
 
 export default function MazeClient() {
   const searchParams = useSearchParams();
   const size = parseInt(searchParams.get("size") || "10");
+
+  const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("selectedChallenges");
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed)) setChallengeList(parsed);
+      } catch {}
+    }
+  }, []);
 
   const {
     maze,
     playerPos,
     seconds,
     finished,
-    challengeCount,
+    // challengeCount,
     currentChallengeType,
     showChallenge,
     completedObstacles,
@@ -26,7 +40,7 @@ export default function MazeClient() {
     handleMove,
     handleChallengeComplete,
     handleChallengeCancel,
-  } = useMazeGame(size);
+  } = useMazeGame(size, challengeList);
 
   return (
     <main
@@ -50,10 +64,10 @@ export default function MazeClient() {
             <span className="font-medium">Thời gian:</span>
             <span>{seconds} giây</span>
           </div>
-          <div className="flex justify-between">
+          {/* <div className="flex justify-between">
             <span className="font-medium">Đã hoàn thành:</span>
             <span>{challengeCount}/5</span>
-          </div>
+          </div> */}
         </div>
       </div>
 

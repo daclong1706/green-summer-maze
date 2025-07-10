@@ -3,6 +3,7 @@
 
 import { useEffect, useRef } from "react";
 import { motion } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 
 interface MazeBoardProps {
   maze: string[][];
@@ -21,7 +22,22 @@ export const MazeBoard = ({
   showChallenge,
   onMove,
 }: MazeBoardProps) => {
-  const cellSize = 28;
+  const searchParams = useSearchParams();
+  const size = parseInt(searchParams.get("size") || "8");
+
+  const calculateCellSize = (size: number) => {
+    const minSize = 8;
+    const maxSize = 24;
+    const maxCellSize = 56;
+    const minCellSize = 24;
+
+    const clampedSize = Math.max(minSize, Math.min(size, maxSize));
+    const t = (clampedSize - minSize) / (maxSize - minSize);
+    return Math.round(maxCellSize - t * (maxCellSize - minCellSize));
+  };
+
+  const cellSize = calculateCellSize(size);
+
   const boardRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -84,7 +100,11 @@ export const MazeBoard = ({
       <motion.img
         src="/player.png"
         alt="Player"
-        className="absolute w-6 h-6"
+        className="absolute"
+        style={{
+          width: `${cellSize - 12}px`,
+          height: `${cellSize - 4}px`,
+        }}
         initial={false}
         animate={{
           top: playerPos.row * (cellSize + 4) + 4,

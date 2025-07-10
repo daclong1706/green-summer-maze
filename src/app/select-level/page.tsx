@@ -1,22 +1,33 @@
-// src/app/select-level/page.tsx
 "use client";
 
 import { useRouter } from "next/navigation";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-
-const LEVELS = [
-  { label: "Bé mới lên mạng", size: 8, level: 1 }, // Dễ – Làm quen
-  { label: "Người dùng thông minh", size: 12, level: 2 }, // Biết phân biệt đúng sai
-  { label: "Người bảo vệ thông tin", size: 16, level: 3 }, // Biết giữ an toàn cá nhân
-  { label: "Chiến binh chống tin giả", size: 20, level: 4 }, // Biết phát hiện và tránh tin giả
-  { label: "Thủ lĩnh tỉnh táo", size: 24, level: 5 }, // Cấp cao nhất – Tỉnh táo, trách nhiệm
-];
 
 export default function SelectLevelPage() {
   const router = useRouter();
+  const [age, setAge] = useState("8");
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const handleSelect = (size: number) => {
-    router.push(`/maze?size=${size} `);
+  // Tự động focus khi trang mở
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const handleStart = () => {
+    const parsedAge = parseInt(age);
+    if (!isNaN(parsedAge) && parsedAge > 0) {
+      router.push(`/maze?size=${parsedAge}`);
+    } else {
+      alert("Vui lòng nhập tuổi hợp lệ!");
+    }
+  };
+
+  // Bắt phím Enter
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      handleStart();
+    }
   };
 
   return (
@@ -28,17 +39,24 @@ export default function SelectLevelPage() {
         backgroundPosition: "center",
       }}
     >
-      <h1 className="text-4xl font-bold text-green-700 mb-8">Chọn cấp độ</h1>
-      <div className="grid gap-4 w-full max-w-md">
-        {LEVELS.map((level) => (
-          <Button
-            key={level.size}
-            className="text-lg py-6 bg-green-700 hover:bg-green-800"
-            onClick={() => handleSelect(level.size)}
-          >
-            {level.label}
-          </Button>
-        ))}
+      <h1 className="text-4xl font-bold text-green-700 mb-8">
+        Nhập tuổi của bạn
+      </h1>
+      <div className="space-y-4 w-full max-w-sm">
+        <input
+          ref={inputRef}
+          type="number"
+          value={age}
+          onChange={(e) => setAge(e.target.value)}
+          onKeyDown={handleKeyDown}
+          className="w-full text-center text-9xl font-bold text-green-700 bg-transparent outline-none border-none placeholder:text-green-300"
+        />
+        <Button
+          className="text-lg py-6 bg-green-700 hover:bg-green-800 w-full"
+          onClick={handleStart}
+        >
+          Bắt đầu
+        </Button>
       </div>
     </main>
   );
