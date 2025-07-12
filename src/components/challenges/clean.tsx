@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { getCleanItemsBySize, CleanItem } from "@/data/clean-items";
 import { EmojiFeedback } from "../EmojiFeedback";
-import Image from "next/image";
+// import Image from "next/image";
 import { getRandomBgColor } from "@/utils/randomColor";
 
 function shuffle<T>(array: T[]): T[] {
@@ -95,7 +95,7 @@ export function ChallengeClean({
             }} // thêm chiều cao cố định nếu cần
           >
             {item.type === "text" && <p className="m-4">{item.content}</p>}
-            {item.type === "image" && (
+            {/* {item.type === "image" && (
               <Image
                 src={item.content}
                 alt="image"
@@ -103,7 +103,7 @@ export function ChallengeClean({
                 height={160}
                 className="rounded"
               />
-            )}
+            )} */}
           </div>
         ))}
       </div>
