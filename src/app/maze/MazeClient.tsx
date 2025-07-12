@@ -33,6 +33,7 @@ export default function MazeClient() {
     seconds,
     finished,
     // challengeCount,
+    lost,
     currentChallengeType,
     showChallenge,
     completedObstacles,
@@ -81,7 +82,7 @@ export default function MazeClient() {
       />
 
       {finished && <VictoryScreen />}
-      {failedObstacles.size >= 3 && <DefeatScreen />}
+      {lost && <DefeatScreen />}
 
       <ChallengeModal
         show={showChallenge}

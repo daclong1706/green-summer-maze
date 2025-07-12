@@ -1,17 +1,24 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { secretSituations, SecretSituation } from "@/data/secret-situation";
+import {
+  getSecretSituationsBySize,
+  SecretSituation,
+} from "@/data/secret-situation";
 import { Button } from "@/components/ui/button";
 import { EmojiFeedback } from "../EmojiFeedback";
 import Image from "next/image";
 import { Howl } from "howler";
 import confetti from "canvas-confetti";
+import { useSearchParams } from "next/navigation";
 
 function getUniqueRandomChallenge(
-  usedIds: Set<string>
+  usedIds: Set<string>,
+  size: number
 ): SecretSituation | null {
-  const available = secretSituations.filter((c) => !usedIds.has(c.id));
+  const available = getSecretSituationsBySize(size).filter(
+    (c) => !usedIds.has(c.id)
+  );
   if (available.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * available.length);
   return available[randomIndex];
@@ -24,6 +31,9 @@ export function ChallengeSecretSituation({
   onSuccess: () => void;
   onCancel: () => void;
 }) {
+  const searchParams = useSearchParams();
+  const size = parseInt(searchParams.get("size") || "8");
+
   const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
   const [challenge, setChallenge] = useState<SecretSituation | null>(null);
   const [pinInput, setPinInput] = useState("");
@@ -35,7 +45,7 @@ export function ChallengeSecretSituation({
   const [isOpening, setIsOpening] = useState(false);
 
   useEffect(() => {
-    const selected = getUniqueRandomChallenge(usedIds);
+    const selected = getUniqueRandomChallenge(usedIds, size);
     if (selected) {
       setChallenge(selected);
       setUsedIds((prev) => new Set(prev).add(selected.id));
@@ -91,7 +101,8 @@ export function ChallengeSecretSituation({
                 origin: { y: 0.6 },
                 scalar: 0.8,
               });
-            }, 1200);
+              new Howl({ src: ["/tada.mp3"] }).play();
+            }, 2500);
           }}
         />
         <p className="text-muted-foreground text-sm text-center">
@@ -105,7 +116,7 @@ export function ChallengeSecretSituation({
     <>
       <div className="space-y-4">
         <div className="text-center bg-green-700 text-2xl mb-16 p-4 rounded text-white">
-          {challenge.prompt}
+          {challenge.situation}
         </div>
 
         <div className="flex justify-center gap-2">

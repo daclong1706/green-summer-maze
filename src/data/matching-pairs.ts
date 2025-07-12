@@ -1,6 +1,6 @@
 // src/data/matching-pairs.ts
 export function getPairsBySize(size: number): [string, string][] {
-  if (size < 9) {
+  if (size < 12) {
     return [
       ["Xem video", "Chọn video tốt"],
       ["Dùng điện thoại", "Không quá lâu"],
@@ -11,7 +11,7 @@ export function getPairsBySize(size: number): [string, string][] {
       ["Gặp quảng cáo", "Không bấm vào"],
       ["Không hiểu gì", "Hỏi người lớn"],
     ];
-  } else if (size >= 9 && size <= 12) {
+  } else {
     return [
       ["Chia sẻ thông tin cá nhân", "Có thể bị lừa đảo"],
       ["Bình luận xấu", "Làm người khác buồn"],
@@ -27,6 +27,4 @@ export function getPairsBySize(size: number): [string, string][] {
       ["Gặp quảng cáo lạ", "Không nên bấm vào"],
     ];
   }
-
-  return []; // fallback nếu không hợp lệ
 }

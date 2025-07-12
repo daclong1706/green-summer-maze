@@ -4,6 +4,7 @@ import { generateMaze } from "@/utils/generateMaze";
 import { Howl } from "howler";
 import confetti from "canvas-confetti";
 import { ChallengeType } from "@/data/challenge-types";
+
 // "reorder", "match", "traffic", "clean", "quiz", "truth", "situation"
 // const CHALLENGES = ["search", "situation", "truth"] as const;
 // type ChallengeType = (typeof CHALLENGES)[number];
@@ -27,9 +28,11 @@ export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
   const [currentObstacleKey, setCurrentObstacleKey] = useState<string | null>(
     null
   );
+  const [lost, setLost] = useState(false);
 
   const stepSound = useRef<Howl | null>(null);
   const winSound = useRef<Howl | null>(null);
+  const loseSound = useRef<Howl | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -38,6 +41,7 @@ export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
     setPlayerPos({ row: 0, col: 0 });
     setSeconds(0);
     setFinished(false);
+    setLost(false);
     setChallengeCount(0);
     setCompletedObstacles(new Set());
     setFailedObstacles(new Set());
@@ -53,8 +57,9 @@ export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
   }, []);
 
   useEffect(() => {
-    stepSound.current = new Howl({ src: ["/step.wav"] });
+    stepSound.current = new Howl({ src: ["/footstep.mp3"] });
     winSound.current = new Howl({ src: ["/win.mp3"] });
+    loseSound.current = new Howl({ src: ["/lose.mp3"] });
   }, []);
 
   const shuffleChallenges = (types: ChallengeType[]): ChallengeType[] => {
@@ -127,7 +132,21 @@ export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
 
   const handleChallengeCancel = () => {
     if (currentObstacleKey) {
-      setFailedObstacles((prev) => new Set(prev).add(currentObstacleKey));
+      setFailedObstacles((prev) => {
+        const newSet = new Set(prev).add(currentObstacleKey);
+
+        const totalChallenges = challengeTypes.length;
+
+        const requiredToLose =
+          totalChallenges <= 3 ? 1 : totalChallenges <= 5 ? 2 : 3;
+
+        if (newSet.size > requiredToLose) {
+          setLost(true);
+          loseSound.current?.play();
+        }
+
+        return newSet;
+      });
     }
     setShowChallenge(false);
     setChallengeCount((count) => count + 1);
@@ -140,6 +159,7 @@ export function useMazeGame(size: number, challengeTypes: ChallengeType[]) {
     playerPos,
     seconds,
     finished,
+    lost,
     challengeCount,
     challengeQueue,
     currentChallengeType,

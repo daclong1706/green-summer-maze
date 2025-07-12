@@ -1,15 +1,21 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { secretSearchs, SecretSearch } from "@/data/secret-search";
+import { getSecretSearchBySize, SecretSearch } from "@/data/secret-search";
 import { Button } from "@/components/ui/button";
 import { EmojiFeedback } from "../EmojiFeedback";
 import Image from "next/image";
 import { Howl } from "howler";
 import confetti from "canvas-confetti";
+import { useSearchParams } from "next/navigation";
 
-function getUniqueRandomChallenge(usedIds: Set<string>): SecretSearch | null {
-  const available = secretSearchs.filter((c) => !usedIds.has(c.id));
+function getUniqueRandomChallenge(
+  usedIds: Set<string>,
+  size: number
+): SecretSearch | null {
+  const available = getSecretSearchBySize(size).filter(
+    (c) => !usedIds.has(c.id)
+  );
   if (available.length === 0) return null;
   const randomIndex = Math.floor(Math.random() * available.length);
   return available[randomIndex];
@@ -22,6 +28,9 @@ export function ChallengeSecretSearch({
   onSuccess: () => void;
   onCancel: () => void;
 }) {
+  const searchParams = useSearchParams();
+  const size = parseInt(searchParams.get("size") || "8");
+
   const [usedIds, setUsedIds] = useState<Set<string>>(new Set());
   const [challenge, setChallenge] = useState<SecretSearch | null>(null);
   const [pinInput, setPinInput] = useState("");
@@ -33,7 +42,7 @@ export function ChallengeSecretSearch({
   const [isOpening, setIsOpening] = useState(false);
 
   useEffect(() => {
-    const selected = getUniqueRandomChallenge(usedIds);
+    const selected = getUniqueRandomChallenge(usedIds, size);
     if (selected) {
       setChallenge(selected);
       setUsedIds((prev) => new Set(prev).add(selected.id));
@@ -89,7 +98,8 @@ export function ChallengeSecretSearch({
                 origin: { y: 0.6 },
                 scalar: 0.8,
               });
-            }, 1200);
+              new Howl({ src: ["/tada.mp3"] }).play();
+            }, 2500);
           }}
         />
         <p className="text-muted-foreground text-sm text-center">
@@ -102,8 +112,15 @@ export function ChallengeSecretSearch({
   return (
     <>
       <div className="space-y-4">
-        <div className="text-center bg-green-700 text-2xl mb-16 p-4 rounded text-white">
-          {challenge.prompt}
+        <div className="bg-green-700 text-white p-4 rounded mb-8">
+          <p className="text-2xl font-semibold text-center">
+            {challenge.topic}
+          </p>
+          <ul className="mt-4 list-disc list-inside space-y-2 text-left text-lg">
+            {challenge.questions.map((q, index) => (
+              <li key={index}>{q}</li>
+            ))}
+          </ul>
         </div>
 
         <div className="flex justify-center gap-2">

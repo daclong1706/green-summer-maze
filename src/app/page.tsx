@@ -25,6 +25,11 @@ export default function HomePage() {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) setSelectedChallenges(parsed);
       } catch {}
+    } else {
+      localStorage.setItem(
+        "selectedChallenges",
+        JSON.stringify(selectedChallenges)
+      );
     }
   }, []);
 
