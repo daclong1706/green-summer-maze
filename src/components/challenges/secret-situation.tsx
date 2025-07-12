@@ -174,6 +174,10 @@ export function ChallengeSecretSituation({
             Xác nhận
           </Button>
         </div>
+
+        <div className="absolute right-4 bottom-4 font-medium text-lg">
+          {challenge.id}
+        </div>
       </div>
       <EmojiFeedback
         open={feedbackOpen}

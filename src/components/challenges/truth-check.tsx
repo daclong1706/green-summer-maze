@@ -116,9 +116,10 @@ export function ChallengeTruthCheck({
               <Image
                 src={item.content}
                 alt="Thông tin kiểm chứng"
-                width={1024}
-                height={1024}
-                className="max-h-[70vh] h-auto w-auto mx-auto rounded"
+                width={0} // cần thiết khi dùng sizes
+                height={0}
+                sizes="100vw"
+                className="w-auto h-auto max-w-full min-h-[60vh] mx-auto rounded"
               />
             ) : (
               <p className="text-xl font-semibold bg-slate-100 p-6 rounded">
@@ -160,12 +161,12 @@ export function ChallengeTruthCheck({
       <Dialog open={showDialog} onOpenChange={setShowDialog}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle className="text-center text-lg uppercase">
+            <DialogTitle className="text-center text-xl uppercase">
               {feedbackType === "success" ? "Chính xác" : "Sai rồi"}
             </DialogTitle>
           </DialogHeader>
-          <div className="text-sm text-muted-foreground text-center mt-2">
-            💡 {selectedExplanation}
+          <div className="text-lg text-muted-foreground text-left mt-2">
+            {selectedExplanation}
           </div>
           <DialogFooter className="justify-center mt-4">
             <Button
