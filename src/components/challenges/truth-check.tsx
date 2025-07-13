@@ -115,7 +115,7 @@ export function ChallengeTruthCheck({
             {item.type === "image" ? (
               <Image
                 src={item.content}
-                alt="Thông tin kiểm chứng"
+                alt={item.id}
                 width={0} // cần thiết khi dùng sizes
                 height={0}
                 sizes="100vw"
