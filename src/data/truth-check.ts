@@ -170,7 +170,7 @@ export const getTruthItemsBySize = (size: number): TruthItem[] => {
       {
         id: "18",
         content:
-          "https://example.com/image18.jhttps://res.cloudinary.com/dcrrvtmhh/image/upload/v1752335496/Screenshot_2025-07-12_222630_jiuamp.pngpg",
+          "https://example.com/image18.jhttps://res.cloudinary.com/dcrrvtmhh/image/upload/v1752335496/Screenshot_2025-07-12_222630_jiuamp.png",
         type: "image",
         isTrue: true,
         explanation:
