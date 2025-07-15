@@ -77,7 +77,7 @@ export function ChallengeQuiz({
     <>
       <div className="space-y-4">
         <div className="flex justify-between">
-          <p className="text-muted-foreground text-sm">Câu {current + 1}</p>
+          <p className="text-muted-foreground text-md">Câu {current + 1}</p>
           <div className="flex justify-center gap-1">
             {Array.from({ length: 3 }).map((_, idx) => (
               <span key={idx} className="text-xl">
@@ -87,13 +87,13 @@ export function ChallengeQuiz({
           </div>
         </div>
         <div className="space-y-4">
-          <p className="text-base font-medium">{q.question}</p>
+          <p className="text-4xl font-medium">{q.question}</p>
           <div className="grid grid-cols-2 gap-4">
             {q.options.map((opt, idx) => (
               <Button
                 key={idx}
                 variant="outline"
-                className={`w-full text-left h-20 ${
+                className={`w-full text-left text-xl h-20 ${
                   optionColors[idx % optionColors.length]
                 }`}
                 onClick={() => handleAnswer(idx)}
