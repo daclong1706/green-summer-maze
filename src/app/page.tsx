@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState, useEffect } from "react";
 import { ALL_CHALLENGES, ChallengeType } from "@/data/challenge-types";
+import { event } from "@/lib/gtag"; // 👈 GA4 tracking
 
 export default function HomePage() {
   const router = useRouter();
@@ -38,12 +39,27 @@ export default function HomePage() {
       const updated = prev.includes(type)
         ? prev.filter((t) => t !== type)
         : [...prev, type];
+
+      // 👉 Gửi GA event khi user bật / tắt challenge
+      event({
+        action: "toggle_challenge",
+        category: "challenge",
+        label: type,
+      });
+
       localStorage.setItem("selectedChallenges", JSON.stringify(updated));
       return updated;
     });
   };
 
   const handleStart = () => {
+    // 👉 Gửi GA event khi bắt đầu chơi
+    event({
+      action: "start_game",
+      category: "homepage",
+      label: "click_start_button",
+    });
+
     router.push("/select-level");
   };
 

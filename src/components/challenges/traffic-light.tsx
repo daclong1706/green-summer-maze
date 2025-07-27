@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { EmojiFeedback } from "../EmojiFeedback";
-import { trafficActionsBySize, TrafficLevel } from "@/data/traffic-actions";
+import { getTrafficActionsBySize, TrafficLevel } from "@/data/traffic-actions";
 
 function shuffle<T>(array: T[]): T[] {
   const arr = [...array];
@@ -43,7 +43,7 @@ export function ChallengeTrafficLight({
   );
 
   useEffect(() => {
-    const pool = trafficActionsBySize[size] || [];
+    const pool = getTrafficActionsBySize(size);
     const selected = shuffle(pool).slice(0, 5);
     setActions(selected);
   }, [size]);
