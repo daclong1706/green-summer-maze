@@ -1,7 +1,7 @@
 // src/app/maze/MazeClient.tsx
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { redirect, useRouter, useSearchParams } from "next/navigation";
 import { ChallengeModal } from "@/components/maze/ChallengeModal";
 import { MazeBoard } from "@/components/maze/MazeBoard";
 import { useMazeGame } from "@/components/maze/useMazeGame";
@@ -14,6 +14,11 @@ import { useEffect, useState } from "react";
 export default function MazeClient() {
   const searchParams = useSearchParams();
   const size = parseInt(searchParams.get("size") || "10");
+
+  if (isNaN(size) || size <= 0 || size > 120) {
+    // Redirect về trang nhập tuổi nếu size không hợp lệ
+    redirect("/select-level");
+  }
 
   const [challengeList, setChallengeList] = useState<ChallengeType[]>([]);
 

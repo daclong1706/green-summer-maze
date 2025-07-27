@@ -31,6 +31,18 @@ export const MazeBoard = ({
     const maxCellSize = 56;
     const minCellSize = 24;
 
+    if (size > 30) {
+      return 18;
+    }
+
+    if (size > 40) {
+      return 12;
+    }
+
+    if (size > 50) {
+      return 8;
+    }
+
     const clampedSize = Math.max(minSize, Math.min(size, maxSize));
     const t = (clampedSize - minSize) / (maxSize - minSize);
     return Math.round(maxCellSize - t * (maxCellSize - minCellSize));
@@ -102,7 +114,7 @@ export const MazeBoard = ({
         alt="Player"
         className="absolute"
         style={{
-          width: `${cellSize - 12}px`,
+          width: `${cellSize - 8}px`,
           height: `${cellSize - 4}px`,
         }}
         initial={false}

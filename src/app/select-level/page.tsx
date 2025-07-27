@@ -16,10 +16,12 @@ export default function SelectLevelPage() {
 
   const handleStart = () => {
     const parsedAge = parseInt(age);
-    if (!isNaN(parsedAge) && parsedAge > 0) {
+    if (!isNaN(parsedAge) && parsedAge > 0 && parsedAge <= 120) {
       router.push(`/maze?size=${parsedAge}`);
+    } else if (parsedAge > 120) {
+      alert("Quá tuổi rồi không chơi được nữa đâu ???");
     } else {
-      alert("Vui lòng nhập tuổi hợp lệ!");
+      alert("Vui lòng nhập số tuổi hợp lệ");
     }
   };
 
