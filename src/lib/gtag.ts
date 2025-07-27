@@ -3,6 +3,12 @@
 export const GA_MEASUREMENT_ID =
   process.env.NEXT_PUBLIC_GA_ID || "G-LWFGMF167K";
 
+declare global {
+  interface Window {
+    gtag: (...args: unknown[]) => void;
+  }
+}
+
 // Gửi pageview đến GA
 export const pageview = (url: string) => {
   window.gtag("config", GA_MEASUREMENT_ID, {
@@ -25,3 +31,5 @@ export const event = ({ action, category, label, value }: GTagEvent) => {
     value,
   });
 };
+
+export {};
